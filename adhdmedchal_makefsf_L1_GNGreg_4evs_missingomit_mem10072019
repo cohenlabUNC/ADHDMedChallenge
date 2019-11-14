@@ -1,0 +1,135 @@
+#!/bin/sh
+
+### FabScript runs FEAT for several runs and several subjects
+### created by Adam, modified and commented by Fab
+### v3 2004-10-07
+### then by karin, 2-18-2005
+### then by jess, 5-26-2006
+### Again by Jess, 7-6-06 to include a junk variable in feat analysis
+### again by jess 9-7-2006 to use different MPRage images and to add a dated folder for FEATs
+### again by jess 11-2-2006 to use fewer contrasts (don't need positive and negative for each, just positive); also this is for 4 EVs (junk variable), use 3evs program for subjects who have no junk variable (6, 12, e.g.)
+
+### adapted by Mackenzie & Nick 09-13-2019 for ADHDMedChal
+
+
+
+###F doanalysis command runs the other commands
+doanalysis()
+{
+
+###F go in the directory subject/analysis
+###F this saves the feat-reports in the analysis directory
+###[UCLA]mkdir /space/raid4/data/poldrack/schizkids/$SUB/analysis/stop_signal/$FEAT_FOLDER/$RUN_NAME
+###[UCLA]cd /space/raid4/data/poldrack/schizkids/$SUB/analysis/stop_signal/$FEAT_FOLDER/
+ cd /proj/cohenlab/projects/ADHDMedChal/ADHDMC_2019_Process/data_GLM
+
+
+###F the sed command replaces an old string in a text by a new string
+###F read http://www.freeos.com/guides/lsst/ch07sec11.html for info
+###F sed takes the FEAT text (yourdesign.fsf is a text) and changes the parameters
+###F [UCLA]our model for MirrorReading experiment is Subject-11A/analysis/newrun1.fsf
+###F [UCLA]the model for schizkids stop signal is subject 30002_2/analysis/stop_signal/feats_11-2-06/ss_run1.feat/design.fsf
+###F [UCLA] NB: for shell, numbers starts from zero, not from 1
+
+### [MEDCHAL] our model for GNG regular without omissions (i.e. an empty go_omit txt onset file): sub-1005_ses-01_gng_run-01.fsf
+### [MEDCHAL] our model for GNG regular with all event files: sub-1006_ses-01_gng_run-01.fsf **DIFFERENT SHELL SCRIPT**
+
+
+ ##### THIS FILE IS FOR GNG REGULAR WITHOUT OMISSIONS (I.E. EMPTY GO_OMIT TXT ONSET FILE) #####
+
+
+
+
+############################## My Runs ##########################################
+
+###F changes to be made for ss_run1.feat (0) [EXAMPLE FROM UCLA SCHIZKIDS]
+###sed -e "s/30002_2/${SUB}/" -e "s/feats_11-2-06/${FEAT_FOLDER[0]}/" -e "s/ss_run1/${RUN_NAME[0]}/" -e "s/182/${TOTAL_VOLUMES[0]}/" -e "s/BOLD_EPI_0004/BOLD_EPI_00${SCAN_INDEX[0]}/" -e "s/S004_4D_mcf_brain/S0${SCAN_INDEX[0]}_${BOLD_NAME[0]}/" -e "s/Matched_Bandwidth_0003/Matched_Bandwidth_00${MBW_INDEX[0]}/" -e "s/mbw_brain/${MBW_NAME[0]}/" -e "s/30002_2/${MPRAGE_DIR[0]}/" -e "s/mprage_stripped_again/${MPRAGE_NAME[0]}/" -e "s/2_run1_go_onsets/${SUB_NUM}_${ONS_NAME[0]}_go_onsets/" -e "s/2_run1_succ_stop_onsets/${SUB_NUM}_${ONS_NAME[0]}_succ_stop_onsets/" -e "s/2_run1_unsucc_stop_onsets/${SUB_NUM}_${ONS_NAME[0]}_unsucc_stop_onsets/" -e "s/2_run1_junk_onsets/${SUB_NUM}_${ONS_NAME[0]}_junk_onsets/" /space/raid4/data/poldrack/schizkids/30002_2/analysis/stop_signal/feats_11-2-06/ss_run1.feat/design.fsf > ${DESIGN_NAME[0]}.fsf
+
+
+###F changes to be made for sub-1006_ses-01_gng_run-01.fsf [EDITING FOR ADHDMEDCHAL]
+
+
+## ADAPTED FOR ADHDMEDCHAL MEMITCHELL 10/07/2019
+sed -e "s/sub-1005/${SUB}/g" -e "s/1005_2/${SUBSESBEH}/" -e "s/ses-01/${SESSMRI}/g" -e "s/run-01/${RUNMRI}/" -e "s/_run1_/${RUNBEH}/" /proj/cohenlab/projects/ADHDMedChal/ADHDMC_2019_Process/data_GLM/sub-1005_ses-01_gng_run-01.fsf > ${DESIGN_NAME}.fsf
+# explanation of sed function "s/<replace_this>/<with_this_which_you_define_below>/g"
+# the /g at the end of each function segment says: replace all instances in any string from the original .fsf file, not just the first instance
+# will want to update the event file names in the future to match the format of the mri files "sub-XXXX_ses-XX_*_run-XX"
+
+
+
+### runs feat on each design matrix
+#for j in 1; do feat ${DESIGN_NAME[j]}; done
+
+}
+
+############################## My Subjects ##########################################
+
+########## [EXAMPLE FROM UCLA SCHIZKIDS] SUBJECT 30002_2 ##############
+#SUB="30002_2"
+#FEAT_FOLDER=(feats_11-2-06)
+#RUN_NAME=(ss_run1 ss_run2)
+#TOTAL_VOLUMES=(182)
+#SCAN_INDEX=(04 05)
+#BOLD_NAME=(4D_mcf_brain)
+#MBW_INDEX=(03)
+#MBW_NAME=(mbw_brain)
+#MPRAGE_DIR=(30002_2)
+#MPRAGE_NAME=(mprage_stripped_again)
+#SUB_NUM="2"
+#ONS_NAME=(run1 run2)
+#DESIGN_NAME=(design_run1 design_run2)
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+#doanalysis
+
+
+########## [ALL BELOW ARE ADHDMEDCHAL] SUBJECT 1081 SESS 02 RUN 01  ##############
+SUB="sub-1081"
+SUBSESBEH="1081_3" #needed to combine the 
+SESSMRI=(ses-02)
+#SESSBEH=(_2_)
+RUNMRI=(run-01)
+RUNBEH=(_run1_)
+DESIGN_NAME=(sub-1081_ses-02_gng_run-01)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+
+########## SUBJECT 1083 SESS 02 RUN 02  ##############
+SUB="sub-1083"
+SUBSESBEH="1083_3" #needed to combine the 
+SESSMRI=(ses-02)
+#SESSBEH=(_2_)
+RUNMRI=(run-02)
+RUNBEH=(_run2_)
+DESIGN_NAME=(sub-1083_ses-02_gng_run-02)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## SUBJECT 1048 SESS 01 RUN 02  ##############
+SUB="sub-1048"
+SUBSESBEH="1048_2" #needed to combine the 
+SESSMRI=(ses-01)
+#SESSBEH=(_2_)
+RUNMRI=(run-02)
+RUNBEH=(_run2_)
+DESIGN_NAME=(sub-1048_ses-01_gng_run-02)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+

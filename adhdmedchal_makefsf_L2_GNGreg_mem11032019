@@ -1,0 +1,596 @@
+
+#!/bin/sh
+
+### FabScript runs FEAT for several runs and several subjects
+### created by Adam, modified and commented by Fab
+### v3 2004-10-07
+### then by karin, 2-18-2005
+### then by jess, 5-26-2006
+### Again by Jess, 7-6-06 to include a junk variable in feat analysis
+### again by jess 9-7-2006 to add a dated folder for FEATs
+### again by jess 11-2-06 because need to redo using FLAME level 1 instead of fixed effects and only have one contrast (pos) because neg is done automatically
+### now, by mackenzie 11-03-2019 to adapt to the ADHD Med Chal Study at UNC
+
+
+###This version to run higher-level feat to average two runs of a task within each subject (LEVEL 2)
+
+###F doanalysis command runs the other commands
+doanalysis()
+{
+
+###F go in the directory subject/analysis
+###F this saves the feat-reports in the analysis directory
+###mkdir /space/raid4/data/poldrack/schizkids/$SUB/analysis/stop_signal/$FEAT_FOLDER/$RUN_NAME
+#cd /space/raid4/data/poldrack/schizkids/$SUB/analysis/stop_signal/$FEAT_FOLDER/
+cd /proj/cohenlab/projects/ADHDMedChal/ADHDMC_2019_Process/data_GLM/
+
+###F the sed command replaces an old string in a text by a new string
+###F read http://www.freeos.com/guides/lsst/ch07sec11.html for info
+###F sed takes the FEAT text (yourdesign.fsf is a text) and changes the parameters
+###F our model for MirrorReading experiment is Subject-11A/analysis/newrun1.fsf
+###F the model for schizkids stop_signal is subject 30002_2/analysis/stop_signal/feats_11-2-06/ss_higher_level_feat.gfeat/design.fsf
+###F NB: for shell, numbers starts from zero, not from 1
+
+### [ADHD MED CHAL] the model for L2 is sub-1034_ses-01_gng_L2.fsf
+### THIS USES RUN 01 and RUN 02 BY DEFAULT. WILL NEED TO MAKE THE OTHERS MANUALLY!!
+
+
+############################## My Runs ##########################################
+
+
+###F changes to be made for ss_higher_level_feat.gfeat (0)
+#sed -e "s/30002_2/${SUB}/" -e "s/feats_11-2-06/${FEAT_FOLDER[0]}/" -e "s/ss_higher_level_feat/${RUN_NAME[0]}/" -e "s/30002_2/${SUB}/" -e "s/ss_run1.feat/${FIRST_INPUT_NAME[0]}/"  -e "s/30002_2/${SUB}/" -e "s/ss_run2.feat/${SECOND_INPUT_NAME[0]}/" -e "s/30002_2/${EV_TITLE}/" -e "s/30002_2/${CONTRAST}/" /space/raid4/data/poldrack/schizkids/30002_2/analysis/stop_signal/feats_11-2-06/ss_higher_level_feat.gfeat/design.fsf > ${DESIGN_NAME[0]}.fsf
+
+sed -e "s/sub-1034/${SUB}/g" -e "s/run-01/${FIRST_INPUT}/g" -e "s/run-02/${SECOND_INPUT}/g" -e "s/ses-01/${SESSMRI}/g" /proj/cohenlab/projects/ADHDMedChal/ADHDMC_2019_Process/data_GLM/sub-1034_ses-01_gng_L2.fsf > ${DESIGN_NAME}.fsf
+
+### runs feat on each design matrix
+#for j in 0; do feat ${DESIGN_NAME[j]}; done
+
+}
+
+############################## My Subjects ##########################################
+
+########## [UCLA EXAMPLE SUBJECT] SUBJECT 30002_2 ##############
+SUB="30002_2"
+FEAT_FOLDER=(feats_11-2-06)
+RUN_NAME=(ss_higher_level_feat)
+FIRST_INPUT_NAME=(ss_run1.feat)
+SECOND_INPUT_NAME=(ss_run2.feat)
+EV_TITLE="30002_2"
+CONTRAST="30002_2"
+DESIGN_NAME=(design_higher_level_feat)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+#doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1006 ##############
+SUB="sub-1006"
+SESSMRI=(ses-01)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1006_ses-01_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+#doanalysis
+
+########## [ADHD MED CHAL] SUBJECT 1005 SESSION 2 ##############
+SUB="sub-1005"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1005_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1013 SESSION 2 ##############
+SUB="sub-1013"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1013_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1016 SESSION 2 ##############
+SUB="sub-1016"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1016_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+########## [ADHD MED CHAL] SUBJECT 1019 SESSION 2 ##############
+SUB="sub-1019"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1019_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+########## [ADHD MED CHAL] SUBJECT 1020 SESSION 2 ##############
+SUB="sub-1020"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1020_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1022 SESSION 2 ##############
+SUB="sub-1022"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1022_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1023 SESSION 2 ##############
+SUB="sub-1023"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1023_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1024 SESSION 2 ##############
+SUB="sub-1024"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1024_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1025 SESSION 2 ##############
+SUB="sub-1025"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1025_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1026 SESSION 2 ##############
+SUB="sub-1026"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1026_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1027 SESSION 2 ##############
+SUB="sub-1027"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1027_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1028 SESSION 2 ##############
+SUB="sub-1028"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1028_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1029 SESSION 2 ##############
+SUB="sub-1029"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1029_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1031 SESSION 2 ##############
+SUB="sub-1031"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1031_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1034 SESSION 2 ##############
+SUB="sub-1034"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1034_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1036 SESSION 2 ##############
+SUB="sub-1036"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1036_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+########## [ADHD MED CHAL] SUBJECT 1038 SESSION 2 ##############
+SUB="sub-1038"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1038_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1040 SESSION 2 ##############
+SUB="sub-1040"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1040_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1042 SESSION 2 ##############
+SUB="sub-1042"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1042_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1048 SESSION 2 ##############
+SUB="sub-1048"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-02)
+SECOND_INPUT=(run-03)
+DESIGN_NAME=(sub-1048_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1049 SESSION 2 ##############
+SUB="sub-1049"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1049_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1050 SESSION 2 ##############
+SUB="sub-1050"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1050_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1064 SESSION 2 ##############
+SUB="sub-1064"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1064_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1065 SESSION 2 ##############
+SUB="sub-1065"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1065_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1067 SESSION 2 ##############
+SUB="sub-1067"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1067_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1068 SESSION 2 ##############
+SUB="sub-1068"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1068_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1070 SESSION 2 ##############
+SUB="sub-1070"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1070_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1071 SESSION 2 ##############
+SUB="sub-1071"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1071_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1077 SESSION 2 ##############
+SUB="sub-1077"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1077_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+########## [ADHD MED CHAL] SUBJECT 1081 SESSION 2 ##############
+SUB="sub-1081"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1081_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+########## [ADHD MED CHAL] SUBJECT 1083 SESSION 2 ##############
+SUB="sub-1083"
+SESSMRI=(ses-02)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1083_ses-02_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+
+
+
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1010 SESSION 1 ##############
+SUB="sub-1010"
+SESSMRI=(ses-01)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1010_ses-01_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+########## [ADHD MED CHAL] SUBJECT 1026 SESSION 1 ##############
+SUB="sub-1026"
+SESSMRI=(ses-01)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1026_ses-01_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1031 SESSION 1 ##############
+SUB="sub-1031"
+SESSMRI=(ses-01)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1031_ses-01_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1038 SESSION 1 ##############
+SUB="sub-1038"
+SESSMRI=(ses-01)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1038_ses-01_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1042 SESSION 1 ##############
+SUB="sub-1042"
+SESSMRI=(ses-01)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1042_ses-01_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+
+
+########## [ADHD MED CHAL] SUBJECT 1048 SESSION 1 ##############
+SUB="sub-1048"
+SESSMRI=(ses-01)
+FIRST_INPUT=(run-01)
+SECOND_INPUT=(run-02)
+DESIGN_NAME=(sub-1048_ses-01_gng_L2)
+
+
+###F if you don't want to process a sub, deactivate "doanalysis" using "#"
+
+doanalysis
+
+
+
+
+
+
+
+
+
